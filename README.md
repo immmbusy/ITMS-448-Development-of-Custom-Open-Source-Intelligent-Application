@@ -1,65 +1,76 @@
-# ITMS-448
-Project Deliverables:
-Project Plan: Create a detailed project plan outlining tasks, milestones, timelines, roles, and responsibilities. Include development phases, testing, and documentation.
-Risk Management Plan: Identify potential risks that could impact the project's success. Develop strategies to mitigate, monitor, and respond to these risks.
-Earned Value Sheet: Maintain an earned value sheet to track project progress, budget, and performance indicators.
-Project Management Plan: Present an overall project management plan that includes communication strategies, team collaboration tools, and workflow guidelines.
-Intelligent Application with GUI: Develop a fully functional open-source intelligent application with a user-friendly GUI. Ensure the application can retrieve and process data from at least four different data sources or APIs.
-Data Analysis: Perform a comprehensive data analysis on the captured data using appropriate tools and techniques. Present your findings in a clear and insightful manner.
-GitHub Repository: Maintain a version-controlled GitHub repository containing all code, documentation, and resources related to the project. 
+# 🧠 Open-Source Intelligent Application with GUI
 
-# Project Plan: Open-Source Intelligent Application with GUI
-1. Project Overview
-We will develop an intelligent application with a graphical user interface (GUI) that retrieves and processes data from at least four different APIs/data sources. The application will perform data analysis and present insights in an interactive dashboard. The project will follow Agile methodologies, with version control on GitHub.
+## 📌 Project Overview
 
-Key Features:
-GUI Development (PyQt/Tkinter or Dash for web-based)
+Collaboratively design, develop, and implement a custom open-source intelligent application in a high-level programming language such as Python. The application should feature a fully functional graphical user interface (GUI) and have the capability to retrieve and process data from at least four distinct data sources or APIs. You will be responsible for creating a comprehensive project plan, risk management plan, earned value sheet, and project management plan. Additionally, you will perform data analysis on the captured data and present your findings.
 
-Multi-API Integration (e.g., Weather, Financial, News, Open Government Data)
+### 🔑 Key Features
 
-Data Processing & Analysis (Pandas, NumPy, Matplotlib/Seaborn)
+- **GUI Development**: Using PyQt, Tkinter, or Dash (for web-based UI)
+- **Multi-API Integration**: Examples include weather, finance, news, and open government data
+- **Data Processing & Analysis**: Powered by Pandas, NumPy, and Matplotlib/Seaborn
+- **Insight Visualization**: Interactive plots and dashboards
+- **Open-Source & Collaborative**: Hosted on GitHub with full transparency
 
-Insight Visualization (Interactive plots, dashboards)
+---
 
-Open-Source & Collaborative Development (GitHub)
+## 🗂️ Project Plan
 
-2. Project Plan (Tasks, Milestones, Timeline)
-Phase 1: Planning & Setup (Week 1)
-Define project scope & select APIs
+### **Phase 1: Planning & Setup**
+- Define project scope and choose APIs
+- Assign team roles (Frontend, Backend, Data Analyst, PM)
+- Initialize GitHub repo with `main`, `dev`, and feature branches
+- Create initial documentation: `README.md`, `requirements.txt`
 
-Assign roles (Frontend, Backend, Data Analysis, PM)
+### **Phase 2: Development**
+- Design and implement GUI
+- Integrate APIs (handle authentication and data retrieval)
+- Develop data processing module (cleaning and transformation)
+- Create visualizations and data analysis scripts
 
-Set up GitHub repo (branches: dev, main, feature-based)
+### **Phase 3: Testing & Debugging**
+- Unit testing with PyTest
+- User testing and feedback collection
+- Bug fixes and performance optimizations
 
-Create project documentation (README, requirements.txt)
+### **Phase 4: Documentation & Deployment**
+- Finalize user and developer documentation
+- Publish repository releases on GitHub
+- Prepare project presentation and demo
 
-Phase 2: Development (Weeks 2-4)
-GUI Design & Implementation (PyQt/Tkinter)
+---
 
-API Integration (Requests, API keys management)
+## ⚠️ Risk Management
 
-Data Processing Module (Cleaning, transformations)
+| Risk                    | Impact | Likelihood | Mitigation Strategy                         |
+|-------------------------|--------|------------|---------------------------------------------|
+| API Changes/Limitations | High   | Medium     | Use backup APIs, implement data caching     |
+| GUI Performance Issues  | Medium | Low        | Optimize logic, use threading where needed  |
+| Data Inconsistencies    | High   | Medium     | Validate data, implement robust error handling |
+| Team Coordination       | Medium | Low        | Daily standups, track issues on GitHub      |
+| Delays in Timeline      | High   | Medium     | Use Agile sprints and prioritize tasks      |
 
-Data Analysis & Visualization (Pandas, Matplotlib)
+---
 
-Phase 3: Testing & Debugging (Week 5)
-Unit Testing (PyTest)
+## 🧠 Application Features
 
-User Testing (Feedback collection)
+### **APIs in Use**
+- [OpenWeatherMap](https://openweathermap.org/) – Weather data  
+- [Alpha Vantage](https://www.alphavantage.co/) – Financial market info  
+- [NewsAPI](https://newsapi.org/) – Latest news headlines  
+- [COVID-19 API](https://covid19api.com/) – Government health data  
 
-Bug Fixes & Optimization
+### **GUI Dashboard**
+- API selection dropdown
+- Interactive visualizations (charts, graphs, tables)
+- Export insights (CSV, JSON formats)
 
-Phase 4: Documentation & Deployment (Week 6)
-Finalize documentation (User Guide, Developer Guide)
+---
 
-Host on GitHub (with releases)
+## 📈 Data Analysis & Insights
 
-Prepare presentation (Findings, Demo)
+- **Trend Analysis**: Correlate stock performance with weather patterns
+- **Sentiment Analysis**: News headline sentiment and market movement
+- **Statistical Summaries**: Mean, variance, correlation metrics
 
-3. Risk Management Plan
-Risk	Impact	Likelihood	Mitigation Strategy
-API Changes/Limitations	High	Medium	Use fallback APIs, cache data
-GUI Performance Issues	Medium	Low	Optimize code, use threading
-Data Inconsistencies	High	Medium	Data validation, error handling
-Team Collaboration Issues	Medium	Low	Daily standups, GitHub issues
-Deadline Missed	High	Medium	Agile sprints, task prioritization
+
