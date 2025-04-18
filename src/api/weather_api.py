@@ -41,7 +41,7 @@ def fetch_weather_data(city):
             'description': current_weather['weather'][0].get('description', 'No description available')
         }],
         'wind': {
-            'speed': current_weather.get('wind_speed', 0)
+            'speed': current_weather['wind'].get('speed', 0)  # Corrected wind speed key
         }
     }
 
