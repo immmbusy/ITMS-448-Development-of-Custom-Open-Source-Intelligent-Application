@@ -49,6 +49,38 @@ def fetch_news_data(keyword):
     
     return data.get("articles", [])[:5]  # Return top 5 articles
 
+class COVIDDataHandler:
+    def __init__(self):
+        self.base_url = "https://disease.sh/v3/covid-19/countries"
+
+    def fetch_data(self, country):
+        try:
+            url = f"{self.base_url}/{country}"
+            response = requests.get(url)
+            response.raise_for_status()  # Check if the request was successful
+            
+            data = response.json()
+            
+            if 'message' in data:
+                raise Exception(data['message'])
+
+            # Returning a dictionary with COVID stats for the country
+            return {
+                "cases": data.get("cases", 0),
+                "deaths": data.get("deaths", 0),
+                "recovered": data.get("recovered", 0),
+                "todayCases": data.get("todayCases", 0),
+                "active": data.get("active", 0),
+                "critical": data.get("critical", 0),
+                "tests": data.get("tests", 0),
+                "country": data.get("country", "N/A")
+            }
+
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"Error fetching COVID data: {e}")
+        except Exception as e:
+            raise Exception(f"An error occurred: {e}")
+
 class IntelligentApp:
     def __init__(self, root):
         self.root = root
@@ -62,6 +94,8 @@ class IntelligentApp:
         self.create_stock_tab()
         self.create_news_tab()
         self.create_covid_tab()
+
+        self.covid_handler = COVIDDataHandler()
 
     def fetch_weather_data(self, city):
         """Fetch weather data from AgroMonitoring API"""
@@ -268,7 +302,78 @@ class IntelligentApp:
     def create_covid_tab(self):
         tab = tk.Frame(self.notebook)
         self.notebook.add(tab, text="COVID-19")
-        tk.Label(tab, text="COVID-19 tab coming soon!").pack(pady=20)
+
+        tk.Label(tab, text="Enter Country Name:").pack(pady=5)
+        self.covid_entry = tk.Entry(tab, width=30)
+        self.covid_entry.pack(pady=5)
+
+        tk.Button(tab, text="Fetch COVID-19 Data", command=self.fetch_covid_data).pack(pady=10)
+
+        self.covid_result = tk.Text(tab, height=10, width=80)
+        self.covid_result.pack(pady=10)
+
+        self.covid_plot_frame = tk.Frame(tab)
+        self.covid_plot_frame.pack()
+
+    def fetch_covid_data(self):
+        country = self.covid_entry.get()
+        if not country:
+            messagebox.showerror("Error", "Please enter a country name!")
+            return
+
+        try:
+            data = self.covid_handler.fetch_data(country)
+            
+            self.covid_result.delete(1.0, tk.END)
+            self.covid_result.insert(tk.END, f"COVID-19 Data for {data.get('country', country)}:\n\n")
+            self.covid_result.insert(tk.END, f"Total Cases: {data['cases']:,}\n")
+            self.covid_result.insert(tk.END, f"Total Deaths: {data['deaths']:,}\n")
+            self.covid_result.insert(tk.END, f"Total Recovered: {data['recovered']:,}\n")
+            self.covid_result.insert(tk.END, f"Active Cases: {data['active']:,}\n")
+            self.covid_result.insert(tk.END, f"Critical Cases: {data['critical']:,}\n")
+            self.covid_result.insert(tk.END, f"Today's Cases: {data['todayCases']:,}\n")
+            self.covid_result.insert(tk.END, f"Total Tests: {data['tests']:,}\n")
+            
+            self.plot_covid_data(data)
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+            print(traceback.format_exc())
+
+    def plot_covid_data(self, data):
+        self.clear_frame(self.covid_plot_frame)
+        fig, ax = plt.subplots(figsize=(6, 3))
+
+        # Prepare data for plotting
+        categories = ['Cases', 'Deaths', 'Recovered', 'Active']
+        values = [
+            data['cases'],
+            data['deaths'],
+            data['recovered'],
+            data['active']
+        ]
+        
+        # Normalize values for better visualization if they're very large
+        if max(values) > 0:
+            normalized_values = [v/max(values) for v in values]
+        else:
+            normalized_values = values
+            
+        bars = ax.bar(categories, normalized_values, color=['blue', 'red', 'green', 'orange'])
+        
+        ax.set_title(f"COVID-19 Statistics for {data.get('country', 'Country')}")
+        ax.set_ylabel("Normalized Values")
+        
+        # Add value labels on top of bars
+        for bar, value in zip(bars, values):
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width()/2., height,
+                    f'{value:,}',
+                    ha='center', va='bottom')
+        
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        self.embed_plot(fig, self.covid_plot_frame)
 
     def clear_frame(self, frame):
         for widget in frame.winfo_children():
