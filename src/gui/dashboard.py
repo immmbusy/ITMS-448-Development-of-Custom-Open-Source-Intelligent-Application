@@ -1,9 +1,15 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from api.weather_api import fetch_weather_data
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 from api.weather_api import fetch_weather_data
-from api.stocks_api import fetch_stock_data
-from api.news_api import fetch_news_data
-from api.covid_api import fetch_covid_data
+from api.stocks_api import fetch_stock_data  # Keep this even if unused yet
+from api.news_api import fetch_news_data     # Same here
+from api.covid_api import fetch_covid_data   # And here
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 
@@ -67,7 +73,23 @@ class IntelligentApp:
         plt.tight_layout()
         self.embed_plot(fig, self.weather_plot_frame)
     
-    # ... (similar methods for other tabs)
+    # Placeholder for Stock Tab
+    def create_stock_tab(self):
+        tab = tk.Frame(self.notebook)
+        self.notebook.add(tab, text="Stocks")
+        tk.Label(tab, text="Stock tab coming soon!").pack(pady=20)
+
+    # Placeholder for News Tab
+    def create_news_tab(self):
+        tab = tk.Frame(self.notebook)
+        self.notebook.add(tab, text="News")
+        tk.Label(tab, text="News tab coming soon!").pack(pady=20)
+
+    # Placeholder for COVID-19 Tab
+    def create_covid_tab(self):
+        tab = tk.Frame(self.notebook)
+        self.notebook.add(tab, text="COVID-19")
+        tk.Label(tab, text="COVID-19 tab coming soon!").pack(pady=20)
     
     # Utility methods
     def clear_frame(self, frame):
