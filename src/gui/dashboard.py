@@ -29,7 +29,7 @@ class IntelligentApp:
         base_url = "https://api.agromonitoring.com/agro/1.0/weather"
         
         try:
-            # First get coordinates for the city
+            # Get city coordinates
             geolocator = Nominatim(user_agent="weather_app")
             location = geolocator.geocode(city)
             
@@ -48,12 +48,11 @@ class IntelligentApp:
             data = response.json()
             print("API Response:", data)  # Debug print
             
-            # AgroMonitoring API returns different structure than OpenWeatherMap
-            # Let's standardize the response format
+            # Standardize structure according to actual AgroMonitoring fields
             standardized_data = {
                 'name': city,
                 'main': {
-                    'temp': data.get('temp', {}).get('day', 0),
+                    'temp': round(data.get('temp', 0) - 273.15, 2),  # Kelvin to Celsius
                     'humidity': data.get('humidity', 0),
                     'pressure': data.get('pressure', 0)
                 },
@@ -72,7 +71,6 @@ class IntelligentApp:
         except Exception as e:
             raise Exception(f"Error processing weather data: {e}")
 
-    # Weather Tab methods
     def create_weather_tab(self):
         tab = tk.Frame(self.notebook)
         self.notebook.add(tab, text="Weather")
@@ -124,12 +122,11 @@ class IntelligentApp:
         self.clear_frame(self.weather_plot_frame)
         fig, ax = plt.subplots(figsize=(6, 3))
         
-        # Plot multiple weather parameters
         weather_params = {
-            'Temperature': data["main"]["temp"],
-            'Humidity': data["main"]["humidity"],
-            'Wind Speed': data["wind"]["speed"],
-            'Pressure': data["main"]["pressure"]/10  # Convert to kPa for better scale
+            'Temperature (°C)': data["main"]["temp"],
+            'Humidity (%)': data["main"]["humidity"],
+            'Wind Speed (m/s)': data["wind"]["speed"],
+            'Pressure (kPa)': round(data["main"]["pressure"] / 10, 2)
         }
         
         ax.bar(weather_params.keys(), weather_params.values(), color=['skyblue', 'lightgreen', 'orange', 'pink'])
@@ -139,25 +136,21 @@ class IntelligentApp:
         plt.tight_layout()
         self.embed_plot(fig, self.weather_plot_frame)
     
-    # Placeholder for Stock Tab
     def create_stock_tab(self):
         tab = tk.Frame(self.notebook)
         self.notebook.add(tab, text="Stocks")
         tk.Label(tab, text="Stock tab coming soon!").pack(pady=20)
 
-    # Placeholder for News Tab
     def create_news_tab(self):
         tab = tk.Frame(self.notebook)
         self.notebook.add(tab, text="News")
         tk.Label(tab, text="News tab coming soon!").pack(pady=20)
 
-    # Placeholder for COVID-19 Tab
     def create_covid_tab(self):
         tab = tk.Frame(self.notebook)
         self.notebook.add(tab, text="COVID-19")
         tk.Label(tab, text="COVID-19 tab coming soon!").pack(pady=20)
     
-    # Utility methods
     def clear_frame(self, frame):
         for widget in frame.winfo_children():
             widget.destroy()
