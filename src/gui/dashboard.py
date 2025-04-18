@@ -1,17 +1,16 @@
 import sys
 import os
-# Add parent directory to the sys.path for module imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from api.weather_api import fetch_weather_data
+import tkinter as tk
+from tkinter import ttk, messagebox
 from api.stocks_api import fetch_stock_data  # Keep this even if unused yet
 from api.news_api import fetch_news_data     # Same here
 from api.covid_api import fetch_covid_data   # And here
-
-import tkinter as tk
-from tkinter import ttk, messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
+import traceback  # For detailed error reporting
 
 class IntelligentApp:
     def __init__(self, root):
@@ -22,12 +21,11 @@ class IntelligentApp:
         self.notebook = ttk.Notebook(root)
         self.notebook.pack(fill=tk.BOTH, expand=True)
         
-        # Initialize all tabs
         self.create_weather_tab()
         self.create_stock_tab()
         self.create_news_tab()
         self.create_covid_tab()
-    
+
     # Weather Tab methods
     def create_weather_tab(self):
         tab = tk.Frame(self.notebook)
@@ -44,15 +42,26 @@ class IntelligentApp:
         
         self.weather_plot_frame = tk.Frame(tab)
         self.weather_plot_frame.pack()
-    
+
     def fetch_weather(self):
         city = self.city_entry.get()
         if not city:
             messagebox.showerror("Error", "Please enter a city!")
             return
-        
+
         try:
+            # Fetch weather data
             data = fetch_weather_data(city)
+            if not data:
+                raise ValueError("No data received from API.")
+            
+            print("API Response:", data)  # For debugging, can be removed later
+            
+            # Check if the data contains the expected keys
+            if 'main' not in data:
+                raise KeyError("Missing 'main' key in response")
+            
+            # Proceed with weather info extraction if 'main' key is present
             weather_info = (
                 f"Weather in {city}:\n"
                 f"Temperature: {data['main']['temp']}°C\n"
@@ -63,10 +72,20 @@ class IntelligentApp:
             self.weather_result.delete(1.0, tk.END)
             self.weather_result.insert(tk.END, weather_info)
             self.plot_weather(data)
+        
+        except KeyError as e:
+            print(f"Error: Missing key in response: {e}")  # Specific key missing
+            messagebox.showerror("Error", f"The weather data is missing expected information: {e}")
+        
+        except ValueError as e:
+            print(f"Error: {e}")
+            messagebox.showerror("Error", str(e))
+        
         except Exception as e:
-            print(f"Error fetching weather data: {e}")  # Debugging print statement
+            print(f"Error fetching weather data: {e}")  # General error
             messagebox.showerror("Error", f"Failed to fetch weather: {e}")
-    
+            print(traceback.format_exc())  # Print detailed traceback for debugging
+
     def plot_weather(self, data):
         self.clear_frame(self.weather_plot_frame)
         fig, ax = plt.subplots(figsize=(6, 3))
