@@ -1,4 +1,4 @@
-GitHub Repository Link: - GitHub Repository Link
+GitHub Repository Link: -  https://github.com/immmbusy/ITMS-448-Development-of-Custom-Open-Source-Intelligent-Application 
 
 Data Analysis:
 My method for analyzing data incorporates insights from multiple sources, including weather forecasts, stock market trends, news reports, and COVID-19 statistics.
