@@ -1,0 +1,13 @@
+
+
+Github Repository Link: https://github.com/immmbusy/ITMS-448-Development-of-Custom-Open-Source-Intelligent-Application 
+
+Data Analysis: 
+My method for analyzing data incorporates insights from numerous sources, such as weather predictions, stock market trends, news reports, and COVID-19 statistics.The initial phase after gathering the data involves
+cleaning it up. Utilizing Python libraries like Pandas, I prepare the data by addressing missing values, removing duplicates, and fixing any inconsistencies that could skew the analysis. I then apply statistical methods
+and visual tools, including histograms, scatter plots, and correlation matrices, to reveal trends—such as the influence of weather on stock market changes or the correlation between COVID-19 case numbers and local news
+coverage. At this point, I assess data distributions, spot outliers, and summarize the essential characteristics of the data. With libraries like Matplotlib, I create insightful graphs and charts to showcase my key
+findings. For example, I can construct line charts to illustrate how stock prices fluctuate over time or use heatmaps to display COVID-19 data trends across various regions. These visualizations enhance data
+accessibility and provide compelling evidence of noticeable trends or irregularities. For instance, I might find that the relationship between stock prices and weather conditions indicates a possible method for
+forecasting market movements based on weather data or that patterns in news coverage show how public opinion impacts responses to COVID-19. Once these insights are effectively communicated, I present them through interactive dashboards or in traditional reports and presentations tailored for stakeholders.
+
