@@ -1,12 +1,16 @@
+GitHub Repository Link: - GitHub Repository Link
 
-[Github Repository Link: ](https://github.com/immmbusy/ITMS-448-Development-of-Custom-Open-Source-Intelligent-Application) - Github Repository Link
+Data Analysis:
+My method for analyzing data incorporates insights from multiple sources, including weather forecasts, stock market trends, news reports, and COVID-19 statistics.
 
-Data Analysis: 
-My method for analyzing data incorporates insights from numerous sources, such as weather predictions, stock market trends, news reports, and COVID-19 statistics.The initial phase after gathering the data involves
-cleaning it up. Utilizing Python libraries like Pandas, I prepare the data by addressing missing values, removing duplicates, and fixing any inconsistencies that could skew the analysis. I then apply statistical methods
-and visual tools, including histograms, scatter plots, and correlation matrices, to reveal trends—such as the influence of weather on stock market changes or the correlation between COVID-19 case numbers and local news
-coverage. At this point, I assess data distributions, spot outliers, and summarize the essential characteristics of the data. With libraries like Matplotlib, I create insightful graphs and charts to showcase my key
-findings. For example, I can construct line charts to illustrate how stock prices fluctuate over time or use heatmaps to display COVID-19 data trends across various regions. These visualizations enhance data
-accessibility and provide compelling evidence of noticeable trends or irregularities. For instance, I might find that the relationship between stock prices and weather conditions indicates a possible method for
-forecasting market movements based on weather data or that patterns in news coverage show how public opinion impacts responses to COVID-19. Once these insights are effectively communicated, I present them through interactive dashboards or in traditional reports and presentations tailored for stakeholders.
+The first step after collecting the data is to clean and prepare it. Using Python libraries like Pandas, I address missing values, remove duplicates, and resolve inconsistencies that could affect the accuracy of the analysis.
 
+Next, I apply statistical techniques and use visual tools—such as histograms, scatter plots, and correlation matrices—to identify patterns. These might include connections like the influence of weather on stock market behavior or the correlation between COVID-19 cases and news coverage.
+
+At this stage, I assess data distributions, detect outliers, and summarize key features of the dataset. To visualize findings, I use Matplotlib to create clear and insightful graphs and charts. Examples include:
+
+Line charts to show stock price fluctuations over time
+
+Heatmaps to illustrate COVID-19 trends across different regions
+
+These visualizations make the data easier to understand and highlight significant trends or anomalies. For instance, analysis might show a potential link between weather patterns and stock market performance, or demonstrate how media coverage influences public response to the pandemic.
