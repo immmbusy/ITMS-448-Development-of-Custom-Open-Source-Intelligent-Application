@@ -14,7 +14,8 @@ def fetch_weather_data(city):
     lon = location.longitude
     date = datetime.now().strftime('%Y-%m-%d')
 
-    url = f"https://api.openweathermap.org/data/3.0/onecall/day_summary?lat={lat}&lon={lon}&date={date}&appid={API_KEY}&units=metric"
+    # OpenWeather API OneCall endpoint for current weather
+    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
     response = requests.get(url)
 
     if response.status_code != 200:
@@ -23,22 +24,24 @@ def fetch_weather_data(city):
     data = response.json()
     print("Raw API Response:", data)  # Helps debug structure
 
-    if 'temperature' not in data or 'humidity' not in data or 'wind' not in data:
-        raise Exception("Expected weather keys not found in response.")
+    # Check if expected data exists in the response
+    if 'current' not in data or 'weather' not in data['current']:
+        raise Exception("Expected weather data not found in response.")
 
-    # Extract real data (OpenWeather day_summary returns keys like this)
+    # Extract relevant data
+    current_weather = data['current']
     standardized_data = {
         'name': city,
         'main': {
-            'temp': data['temperature'].get('afternoon', 0),
-            'humidity': data.get('humidity', 0),
-            'pressure': data.get('pressure', 0)
+            'temp': current_weather.get('temp', 0),
+            'humidity': current_weather.get('humidity', 0),
+            'pressure': current_weather.get('pressure', 0)
         },
         'weather': [{
-            'description': data.get('summary', {}).get('title', 'No summary available')
+            'description': current_weather['weather'][0].get('description', 'No description available')
         }],
         'wind': {
-            'speed': data['wind'].get('speed_avg', 0)
+            'speed': current_weather.get('wind_speed', 0)
         }
     }
 
