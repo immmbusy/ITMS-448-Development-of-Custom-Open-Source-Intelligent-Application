@@ -2,15 +2,13 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from api.weather_api import fetch_weather_data
 import tkinter as tk
 from tkinter import ttk, messagebox
-from api.stocks_api import fetch_stock_data  # Keep this even if unused yet
-from api.news_api import fetch_news_data     # Same here
-from api.covid_api import fetch_covid_data   # And here
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
-import traceback  # For detailed error reporting
+import traceback
+import requests
+from geopy.geocoders import Nominatim
 
 class IntelligentApp:
     def __init__(self, root):
@@ -25,6 +23,54 @@ class IntelligentApp:
         self.create_stock_tab()
         self.create_news_tab()
         self.create_covid_tab()
+
+    def fetch_weather_data(self, city):
+        API_KEY = "9bec9e6444e7cf3de8ac3d384ff22c7a"  # AgroMonitoring API key
+        base_url = "https://api.agromonitoring.com/agro/1.0/weather"
+        
+        try:
+            # First get coordinates for the city
+            geolocator = Nominatim(user_agent="weather_app")
+            location = geolocator.geocode(city)
+            
+            if not location:
+                raise Exception("City not found!")
+
+            params = {
+                'lat': location.latitude,
+                'lon': location.longitude,
+                'appid': API_KEY
+            }
+            
+            response = requests.get(base_url, params=params)
+            response.raise_for_status()
+            
+            data = response.json()
+            print("API Response:", data)  # Debug print
+            
+            # AgroMonitoring API returns different structure than OpenWeatherMap
+            # Let's standardize the response format
+            standardized_data = {
+                'name': city,
+                'main': {
+                    'temp': data.get('temp', {}).get('day', 0),
+                    'humidity': data.get('humidity', 0),
+                    'pressure': data.get('pressure', 0)
+                },
+                'weather': [{
+                    'description': data.get('weather', [{}])[0].get('description', 'N/A')
+                }],
+                'wind': {
+                    'speed': data.get('wind_speed', 0)
+                }
+            }
+            
+            return standardized_data
+            
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"Failed to fetch weather data: {e}")
+        except Exception as e:
+            raise Exception(f"Error processing weather data: {e}")
 
     # Weather Tab methods
     def create_weather_tab(self):
@@ -50,47 +96,46 @@ class IntelligentApp:
             return
 
         try:
-            # Fetch weather data
-            data = fetch_weather_data(city)
+            data = self.fetch_weather_data(city)
             if not data:
                 raise ValueError("No data received from API.")
             
-            print("API Response:", data)  # For debugging, can be removed later
-            
-            # Check if the data contains the expected keys
-            if 'main' not in data:
-                raise KeyError("Missing 'main' key in response")
-            
-            # Proceed with weather info extraction if 'main' key is present
             weather_info = (
                 f"Weather in {city}:\n"
                 f"Temperature: {data['main']['temp']}°C\n"
                 f"Humidity: {data['main']['humidity']}%\n"
                 f"Conditions: {data['weather'][0]['description']}\n"
-                f"Wind Speed: {data['wind']['speed']} m/s"
+                f"Wind Speed: {data['wind']['speed']} m/s\n"
+                f"Pressure: {data['main']['pressure']} hPa"
             )
             self.weather_result.delete(1.0, tk.END)
             self.weather_result.insert(tk.END, weather_info)
             self.plot_weather(data)
         
         except KeyError as e:
-            print(f"Error: Missing key in response: {e}")  # Specific key missing
+            print(f"Error: Missing key in response: {e}")
             messagebox.showerror("Error", f"The weather data is missing expected information: {e}")
-        
-        except ValueError as e:
-            print(f"Error: {e}")
-            messagebox.showerror("Error", str(e))
-        
         except Exception as e:
-            print(f"Error fetching weather data: {e}")  # General error
+            print(f"Error fetching weather data: {e}")
             messagebox.showerror("Error", f"Failed to fetch weather: {e}")
-            print(traceback.format_exc())  # Print detailed traceback for debugging
+            print(traceback.format_exc())
 
     def plot_weather(self, data):
         self.clear_frame(self.weather_plot_frame)
         fig, ax = plt.subplots(figsize=(6, 3))
-        ax.bar(["Temperature (°C)"], [data["main"]["temp"]], color='skyblue')
-        ax.set_title(f"Weather in {data['name']}")
+        
+        # Plot multiple weather parameters
+        weather_params = {
+            'Temperature': data["main"]["temp"],
+            'Humidity': data["main"]["humidity"],
+            'Wind Speed': data["wind"]["speed"],
+            'Pressure': data["main"]["pressure"]/10  # Convert to kPa for better scale
+        }
+        
+        ax.bar(weather_params.keys(), weather_params.values(), color=['skyblue', 'lightgreen', 'orange', 'pink'])
+        ax.set_title(f"Weather in {self.city_entry.get()}")
+        ax.set_ylabel("Value")
+        plt.xticks(rotation=45)
         plt.tight_layout()
         self.embed_plot(fig, self.weather_plot_frame)
     
@@ -121,3 +166,8 @@ class IntelligentApp:
         canvas = FigureCanvasTkAgg(fig, master=frame)
         canvas.draw()
         canvas.get_tk_widget().pack()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = IntelligentApp(root)
+    root.mainloop()
