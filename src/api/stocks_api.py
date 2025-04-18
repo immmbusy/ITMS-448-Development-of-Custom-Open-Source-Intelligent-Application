@@ -1,0 +1,20 @@
+import requests
+import pandas as pd
+
+STOCK_API_KEY = "your_alphavantage_api_key"
+
+def fetch_stock_data(symbol):
+    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={STOCK_API_KEY}"
+    response = requests.get(url)
+    data = response.json()
+    
+    if "Error Message" in data:
+        raise Exception("Invalid stock symbol!")
+    
+    time_series = data.get("Time Series (Daily)", {})
+    if not time_series:
+        raise Exception("No data available!")
+    
+    df = pd.DataFrame(time_series).T
+    df.index = pd.to_datetime(df.index)
+    return df.astype(float)
