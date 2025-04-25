@@ -1,5 +1,8 @@
 # 🧠 Open-Source Intelligent Application with GUI
 
+# 📂 Doc folder
+“Please take a look at the demo video showcasing the output of my application (MP4 Video Demonstration Test).”
+
 ## 📌 Project Overview
 
 Collaboratively design, develop, and implement a custom open-source intelligent application in a high-level programming language such as Python. The application should feature a fully functional graphical user interface (GUI) and have the capability to retrieve and process data from at least four distinct data sources or APIs. You will be responsible for creating a comprehensive project plan, risk management plan, earned value sheet, and project management plan. Additionally, you will perform data analysis on the captured data and present your findings.
